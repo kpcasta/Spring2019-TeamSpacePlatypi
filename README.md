@@ -1,7 +1,29 @@
-#Team Space Platypi
+# Team Space Platypi ![status](https://img.shields.io/badge/status-inactive-red.svg)
 
-All instructions for contributing to this repo can be found here:
-https://docs.google.com/document/d/1HevYHbk6i01ormTmIlpFZJVc52T-WsISUdta9TT5iKA/edit?usp=sharing
+### Overview
 
-Formatter from CodeU 2019 Directory:
-java -jar formatter.jar --replace $(git ls-files|grep \.java$)
+We like to think of this web app like social media backwards. Instead of making connections based off of who you know, you search the different communities you are a part of for interests, hobbies, classes, etc. that you share with others. If you and another person share an interest and a community, you can connect to grow in together in that aspect in a shared platform!
+
+### Details
+* Google CodeU Spring 2019 Student Project
+* Deployed at https://sp19-codeu-28-4865.appspot.com/
+* Project Advisor: Brian Chen
+* Team: Karen Lin, Kendall Castañeda, Prudence Phillips, Sriya Lingampalli
+
+### Project Pictures
+![Platypi Home Page](readme/Platypi01.PNG)
+
+![Platypi User Page](readme/Platypi02.PNG)
+
+### Setup
+* Javac Version 1.8.0+
+* Maven 3.60+
+
+### Running a Development Server
+`mvn appengine:devserver`
+
+### Deployment
+`mvn appengine:update`
+
+### Old Repository
+https://github.com/FluffySheep/CodeUSpring19-Team28

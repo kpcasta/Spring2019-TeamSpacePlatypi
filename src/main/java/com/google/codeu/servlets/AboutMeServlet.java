@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
@@ -78,35 +94,31 @@ public class AboutMeServlet extends HttpServlet {
     User user = datastore.getUser(userEmail);
 
     if (user == null) {
-      user = new User(userEmail, "", "");
+      // If the user doesn't exist, then return.
+      response.sendRedirect("/error404");
+      return;
     }
 
     // Allows only basic text editing, image uploading, and linking functions
     Whitelist whitelist = Whitelist.basicWithImages().addTags("a").addAttributes("a", "href");
 
+    User.Builder userBuilder = User.Builder.fromUser(user);
+
     // About me section
-    String about = request.getParameter("about-me");
-    if (about == null || about.isEmpty()) {
-      about = user.getAboutMe();
-    } else {
-      about = Jsoup.clean(about, whitelist);
+    String aboutMe = request.getParameter("about-me");
+    if (aboutMe != null && !aboutMe.isEmpty()) {
+      aboutMe = Jsoup.clean(aboutMe, whitelist);
+      userBuilder.setAboutMe(aboutMe);
     }
 
-    // Location section
+    // Location
     String location = request.getParameter("location");
-    if (location == null || location.isEmpty()) {
-      location = user.getLocation();
-    } else {
+    if (location != null && !location.isEmpty()) {
       location = Jsoup.clean(location, whitelist);
+      userBuilder.setLocation(location);
     }
 
-    // Update the existing user
-    user.setAboutMe(about);
-    user.setLocation(location);
-
-    // Store the user
-    datastore.storeUser(user);
-
+    datastore.storeUser(userBuilder.build());
     response.sendRedirect("/user-page.html?user=" + userEmail);
   }
 }
